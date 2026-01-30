@@ -33,4 +33,15 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 app = ApplicationBuilder().token(os.getenv("TELEGRAM_TOKEN")).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
-app.run_polling()
+import os
+
+PORT = int(os.environ.get("PORT", 8080))
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
+
+app.run_webhook(
+    listen="0.0.0.0",
+    port=PORT,
+    url_path="webhook",
+    webhook_url=f"{WEBHOOK_URL}/webhook"
+)
+
