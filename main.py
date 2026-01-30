@@ -1,9 +1,9 @@
 import os
+from google import genai
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 
-import google.generativeai as genai
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
