@@ -1,13 +1,15 @@
-print("AVAILABLE MODELS:")
-for m in client.models.list():
-    print(m.name)
-
 import os
 from google import genai
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 
+# اول client ساخته می‌شه
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+# بعد از ساخته شدن، ازش استفاده می‌کنیم
+print("AVAILABLE MODELS:")
+for m in client.models.list():
+    print(m.name)
 
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
