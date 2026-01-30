@@ -10,26 +10,22 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_message = update.message.text
 
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-pro",
             contents=user_message
         )
 
-        # استخراج امن متن
-        if response.candidates and len(response.candidates) > 0:
+        if response.candidates:
             parts = response.candidates[0].content.parts
-            if parts and len(parts) > 0:
-                text = parts[0].text
-            else:
-                text = "❌ جمینای پاسخی نداد."
+            text = parts[0].text if parts else "❌ پاسخی دریافت نشد."
         else:
-            text = "❌ جمینای پاسخی نداد."
+            text = "❌ پاسخی دریافت نشد."
 
         await update.message.reply_text(text)
 
     except Exception as e:
-        # این خط خیلی مهمه: خطای واقعی رو تو لاگ می‌نویسه
         print("GEMINI ERROR:", e)
-        await update.message.reply_text("❌ خطا در پردازش پاسخ جمینای.")
+        await update.message.reply_text("❌ خطا در ارتباط با جمینای.")
+
 
 app = ApplicationBuilder().token(os.getenv("TELEGRAM_TOKEN")).build()
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
