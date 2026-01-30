@@ -1,27 +1,15 @@
 import os
-from google import genai
+import google.generativeai as genai
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel("gemini-pro")
 
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
-        user_message = update.message.text
-
-        response = client.models.generate_content(
-            model="models/gemini-1.5-flash-latest",
-            contents=user_message
-        )
-
-        if response.candidates:
-            parts = response.candidates[0].content.parts
-            text = parts[0].text if parts else "❌ پاسخی دریافت نشد."
-        else:
-            text = "❌ پاسخی دریافت نشد."
-
-        await update.message.reply_text(text)
-
+        response = model.generate_content(update.message.text)
+        await update.message.reply_text(response.text)
     except Exception as e:
         print("GEMINI ERROR:", e)
         await update.message.reply_text("❌ خطا در ارتباط با جمینای.")
