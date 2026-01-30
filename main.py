@@ -10,7 +10,7 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_message = update.message.text
 
         response = client.models.generate_content(
-            model="gemini-pro",
+            model="gemini-1.0-pro",
             contents=user_message
         )
 
