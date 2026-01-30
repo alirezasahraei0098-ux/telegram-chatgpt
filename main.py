@@ -9,8 +9,10 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         user_message = update.message.text
 
-        model = genai.GenerativeModel("gemini-pro")
-        response = model.generate_content(user_message)
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=user_message
+        )
 
         await update.message.reply_text(response.text)
 
